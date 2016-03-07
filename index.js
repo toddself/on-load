@@ -1,3 +1,4 @@
+/* global MutationObserver */
 var document = require('global/document')
 
 module.exports = function createOnload () {
@@ -6,15 +7,16 @@ module.exports = function createOnload () {
   var observer = new MutationObserver(function (mutations) {
     for (var i = 0; i < mutations.length; i++) {
       var mutation = mutations[i]
-      for (var x = 0; x < mutation.addedNodes.length; x++) {
-        for (var y = 0; y < watch.length; y++) {
+      var x, y
+      for (x = 0; x < mutation.addedNodes.length; x++) {
+        for (y = 0; y < watch.length; y++) {
           if (watch[y][0] === mutation.addedNodes[x]) {
             watch[y][1]()
           }
         }
       }
-      for (var x = 0; x < mutation.removedNodes.length; x++) {
-        for (var y = 0; y < watch.length; y++) {
+      for (x = 0; x < mutation.removedNodes.length; x++) {
+        for (y = 0; y < watch.length; y++) {
           if (watch[y][0] === mutation.removedNodes[x]) {
             watch[y][2]()
             watch.splice(y, 1)
