@@ -1,4 +1,4 @@
-var onload = require('./')()
+var onload = require('./')
 var test = require('tape')
 
 test('onload/onunload', function (t) {
