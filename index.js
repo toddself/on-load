@@ -1,9 +1,9 @@
 /* global MutationObserver */
 var document = require('global/document')
+var window = require('global/window')
+var watch = []
 
-module.exports = function createOnload () {
-  var watch = []
-
+if (window && window.MutationObserver) {
   var observer = new MutationObserver(function (mutations) {
     for (var i = 0; i < mutations.length; i++) {
       var mutation = mutations[i]
@@ -26,9 +26,10 @@ module.exports = function createOnload () {
     }
   })
   observer.observe(document.body, {childList: true, subtree: true})
-  return function onload (el, l, u) {
-    l = l || function () {}
-    u = u || function () {}
-    watch.push([el, l, u])
-  }
+}
+
+module.exports = function onload (el, l, u) {
+  l = l || function () {}
+  u = u || function () {}
+  watch.push([el, l, u])
 }
