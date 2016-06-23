@@ -2,7 +2,7 @@
 var document = require('global/document')
 var window = require('global/window')
 var watch = []
-var KEY_ID = 'onloadid'
+var KEY_ID = 'onloadid' + (new Date%9e6).toString(36)
 var INDEX = 0
 
 if (window && window.MutationObserver) {
@@ -34,7 +34,7 @@ module.exports = function onload (el, on, off) {
   on = on || function () {}
   off = off || function () {}
   el.dataset[KEY_ID] = INDEX
-  watch.push([INDEX + '', on, off])
+  watch.push([INDEX.toString(), on, off])
   INDEX += 1
 }
 
