@@ -36,7 +36,7 @@ test('nested', function (t) {
   e2.removeChild(e3)
 })
 
-test.skip('complex', function (t) {
+test('complex', function (t) {
   t.plan(4)
   var state = []
 
@@ -80,12 +80,12 @@ test.skip('complex', function (t) {
       t.deepEqual(state, ['off', 'on'], 'turn off/on')
     }
   ], function () {
-    document.body.innerHTML = ''
+    //document.body.innerHTML = ''
     t.end()
   })
 })
 
-test.skip('complex nested', function (t) {
+test('complex nested', function (t) {
   var state = []
   function button () {
     var el = yo`<button>click</button>`
@@ -150,7 +150,7 @@ test.skip('complex nested', function (t) {
       t.deepEqual(state, ['off'], 'turn 1 off')
     }
   ], function () {
-    document.body.innerHTML = ''
+    //document.body.innerHTML = ''
     t.end()
   })
 })
