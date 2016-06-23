@@ -86,6 +86,7 @@ test('complex', function (t) {
 })
 
 test('complex nested', function (t) {
+  t.plan(8)
   var state = []
   function button () {
     var el = yo`<button>click</button>`
@@ -148,6 +149,20 @@ test('complex nested', function (t) {
     },
     function () {
       t.deepEqual(state, ['off'], 'turn 1 off')
+      state = []
+      root = yo.update(root, app(yo`Loading...`))
+    },
+    function () {
+      t.deepEqual(state, ['off'], 'turn off')
+      state = []
+      root = yo.update(root, app(yo`<div>
+        <ul>
+          <li><div><p>${button()}</p></div></li>
+        </ul>
+      </div>`))
+    },
+    function () {
+      t.deepEqual(state, ['on'], 'turn on')
     }
   ], function () {
     root.parentNode.removeChild(root)

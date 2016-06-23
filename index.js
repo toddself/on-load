@@ -11,15 +11,12 @@ if (window && window.MutationObserver) {
       eachMutation(mutations[i].removedNodes, function (index) {
         if (watch[index][2]) {
           watch[index][2]()
-          //watch[index][2] = null
-          //watch.splice(index, 1)
+          // TODO: Do we need clean up here?
         }
       })
       eachMutation(mutations[i].addedNodes, function (index) {
         if (watch[index][1]) {
-          // TODO: Should queue functions to run, then run them all on setImmediate?
           watch[index][1]()
-          //watch[index][1] = null
         }
       })
     }
