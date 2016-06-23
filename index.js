@@ -2,7 +2,7 @@
 var document = require('global/document')
 var window = require('global/window')
 var watch = []
-var KEY_ID = 'onloadid' + (new Date%9e6).toString(36)
+var KEY_ID = 'onloadid' + (new Date() % 9e6).toString(36)
 var INDEX = 0
 
 if (window && window.MutationObserver) {
