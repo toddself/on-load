@@ -36,6 +36,7 @@ module.exports = function onload (el, on, off) {
 }
 
 function eachMutation (nodes, fn) {
+  if (watch.length < 1) return
   for (var i = 0; i < nodes.length; i++) {
     if (nodes[i] && nodes[i].dataset && nodes[i].dataset[KEY_ID]) {
       for (var j = 0; j < watch.length; j++) {
