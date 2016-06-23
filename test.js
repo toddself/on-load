@@ -80,7 +80,7 @@ test('complex', function (t) {
       t.deepEqual(state, ['off', 'on'], 'turn off/on')
     }
   ], function () {
-    //document.body.innerHTML = ''
+    root.parentNode.removeChild(root)
     t.end()
   })
 })
@@ -150,7 +150,7 @@ test('complex nested', function (t) {
       t.deepEqual(state, ['off'], 'turn 1 off')
     }
   ], function () {
-    //document.body.innerHTML = ''
+    root.parentNode.removeChild(root)
     t.end()
   })
 })
