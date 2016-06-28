@@ -77,7 +77,7 @@ test('complex', function (t) {
       </p>`)
     },
     function () {
-      t.deepEqual(state, ['off', 'on'], 'turn off/on')
+      t.deepEqual(state, ['on'], 'turn on')
     }
   ], function () {
     root.parentNode.removeChild(root)
@@ -117,7 +117,6 @@ test('complex nested', function (t) {
     },
     function () {
       t.deepEqual(state, ['on'], 'turn on')
-
       state = []
       root = yo.update(root, app(yo`<div class="page">
         <h3>Another Page</h3>
@@ -140,7 +139,7 @@ test('complex nested', function (t) {
       </div>`))
     },
     function () {
-      t.deepEqual(state, [], 'do nothing')
+      t.deepEqual(state, ['off', 'on', 'off', 'on'], 'both turn off/on')
       state = []
       root = yo.update(root, app(yo`<div class="page">
         ${button()}
@@ -148,7 +147,7 @@ test('complex nested', function (t) {
       </div>`))
     },
     function () {
-      t.deepEqual(state, ['off'], 'turn 1 off')
+      t.deepEqual(state, ['off', 'on', 'off'], 'turn off/on and other off')
       state = []
       root = yo.update(root, app(yo`Loading...`))
     },
@@ -170,6 +169,43 @@ test('complex nested', function (t) {
   })
 })
 
+test('same node, different onloadid', function (t) {
+  t.plan(4)
+  function page1 () {
+    var el = yo`<div><h1>Page 1</h1></div>`
+    onload(el, function () {
+      t.ok(true, 'called onload page1')
+    }, function () {
+      t.ok(true, 'called onunload page1')
+    })
+    return el
+  }
+  function page2 () {
+    var el = yo`<div><h1>Page 2</h1></div>`
+    onload(el, function () {
+      t.ok(true, 'called onload page2')
+    }, function () {
+      t.ok(true, 'called onunload page2')
+    })
+    return el
+  }
+  var root = yo`<div>Loading...</div>`
+  document.body.appendChild(root)
+  runops([
+    function () {
+      root = yo.update(root, page1())
+    },
+    function () {
+      root = yo.update(root, page2())
+    },
+    function () {
+      document.body.removeChild(root)
+    }
+  ], function () {
+    t.end()
+  })
+})
+
 function runops (ops, done) {
   function loop () {
     var next = ops.shift()
@@ -177,7 +213,7 @@ function runops (ops, done) {
       next()
       setTimeout(loop, 10)
     } else {
-      done()
+      if (done) done()
     }
   }
   setTimeout(loop, 10)
