@@ -1,6 +1,6 @@
 {
   "name": "on-load",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "On load/unload events for DOM elements using a MutationObserver",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,8 @@
     "dom",
     "element",
     "onload",
-    "unload"
+    "unload",
+    "yo-yo"
   ],
   "author": "Kyle Robinson Young <kyle@dontkry.com> (http://dontkry.com)",
   "license": "MIT",
