@@ -37,7 +37,7 @@ test('nested', function (t) {
 })
 
 test('complex', function (t) {
-  t.plan(4)
+  t.plan(3)
   var state = []
 
   function button () {
@@ -59,11 +59,6 @@ test('complex', function (t) {
     function () {
       t.deepEqual(state, ['on'], 'turn on')
       state = []
-      root = yo.update(root, yo`<p>${button()}</p>`)
-    },
-    function () {
-      t.deepEqual(state, ['off', 'on'], 'turn off/on')
-      state = []
       root = yo.update(root, yo`<p>removed</p>`)
     },
     function () {
@@ -78,15 +73,15 @@ test('complex', function (t) {
     },
     function () {
       t.deepEqual(state, ['on'], 'turn on')
+      root.parentNode.removeChild(root)
     }
   ], function () {
-    root.parentNode.removeChild(root)
     t.end()
   })
 })
 
 test('complex nested', function (t) {
-  t.plan(8)
+  t.plan(7)
   var state = []
   function button () {
     var el = yo`<button>click</button>`
@@ -135,24 +130,16 @@ test('complex nested', function (t) {
       state = []
       root = yo.update(root, app(yo`<div class="page">
         ${button()}
-        ${button()}
-      </div>`))
-    },
-    function () {
-      t.deepEqual(state, ['off', 'on', 'off', 'on'], 'both turn off/on')
-      state = []
-      root = yo.update(root, app(yo`<div class="page">
-        ${button()}
         <p>removed</p>
       </div>`))
     },
     function () {
-      t.deepEqual(state, ['off', 'on', 'off'], 'turn off/on and other off')
+      t.deepEqual(state, ['off'], 'turn one off')
       state = []
       root = yo.update(root, app(yo`Loading...`))
     },
     function () {
-      t.deepEqual(state, ['off'], 'turn off')
+      t.deepEqual(state, ['off'], 'turn other off')
       state = []
       root = yo.update(root, app(yo`<div>
         <ul>
@@ -162,34 +149,31 @@ test('complex nested', function (t) {
     },
     function () {
       t.deepEqual(state, ['on'], 'turn on')
+      root.parentNode.removeChild(root)
     }
   ], function () {
-    root.parentNode.removeChild(root)
     t.end()
   })
 })
 
-test('same node, different onloadid', function (t) {
-  t.plan(4)
+test('fire on same node but not from the same caller', function (t) {
+  t.plan(1)
+  var results = []
   function page1 () {
-    var el = yo`<div><h1>Page 1</h1></div>`
-    onload(el, function () {
-      t.ok(true, 'called onload page1')
+    return onload(yo`<div id="choo-root">page1</div>`, function () {
+      results.push('page1 on')
     }, function () {
-      t.ok(true, 'called onunload page1')
+      results.push('page1 off')
     })
-    return el
   }
   function page2 () {
-    var el = yo`<div><h1>Page 2</h1></div>`
-    onload(el, function () {
-      t.ok(true, 'called onload page2')
+    return onload(yo`<div id="choo-root">page2</div>`, function () {
+      results.push('page2 on')
     }, function () {
-      t.ok(true, 'called onunload page2')
+      results.push('page2 off')
     })
-    return el
   }
-  var root = yo`<div>Loading...</div>`
+  var root = page1()
   document.body.appendChild(root)
   runops([
     function () {
@@ -199,9 +183,19 @@ test('same node, different onloadid', function (t) {
       root = yo.update(root, page2())
     },
     function () {
+      root = yo.update(root, page2())
+    },
+    function () {
       document.body.removeChild(root)
     }
   ], function () {
+    var expected = [
+      'page1 on',
+      'page1 off',
+      'page2 on',
+      'page2 off'
+    ]
+    t.deepEqual(results, expected)
     t.end()
   })
 })

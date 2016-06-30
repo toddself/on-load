@@ -31,8 +31,9 @@ module.exports = function onload (el, on, off) {
   on = on || function () {}
   off = off || function () {}
   el.setAttribute(KEY_ATTR, 'o' + INDEX)
-  watch['o' + INDEX] = [on, off, 0]
+  watch['o' + INDEX] = [on, off, 0, onload.caller]
   INDEX += 1
+  return el
 }
 
 function turnon (index) {
@@ -50,7 +51,14 @@ function turnoff (index) {
 }
 
 function eachAttr (mutation, on, off) {
+  if (!watch[mutation.oldValue]) {
+    return
+  }
   var newValue = mutation.target.getAttribute(KEY_ATTR)
+  if (sameOrigin(mutation.oldValue, newValue)) {
+    watch[newValue] = watch[mutation.oldValue]
+    return
+  }
   Object.keys(watch).forEach(function (k) {
     if (mutation.oldValue === k) {
       off(k)
@@ -59,6 +67,10 @@ function eachAttr (mutation, on, off) {
       on(k)
     }
   })
+}
+
+function sameOrigin (oldValue, newValue) {
+  return watch[oldValue][3] === watch[newValue][3]
 }
 
 function eachMutation (nodes, fn) {
