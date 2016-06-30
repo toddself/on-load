@@ -159,15 +159,15 @@ test('complex nested', function (t) {
 test('fire on same node but not from the same caller', function (t) {
   t.plan(1)
   var results = []
-  function page1 () {
-    return onload(yo`<div id="choo-root">page1</div>`, function () {
+  function page1 (contents) {
+    return onload(yo`<div id="choo-root">${contents}</div>`, function () {
       results.push('page1 on')
     }, function () {
       results.push('page1 off')
     })
   }
-  function page2 () {
-    return onload(yo`<div id="choo-root">page2</div>`, function () {
+  function page2 (contents) {
+    return onload(yo`<div id="choo-root">${contents}</div>`, function () {
       results.push('page2 on')
     }, function () {
       results.push('page2 off')
@@ -186,6 +186,15 @@ test('fire on same node but not from the same caller', function (t) {
       root = yo.update(root, page2())
     },
     function () {
+      root = yo.update(root, page2('dont fire'))
+    },
+    function () {
+      root = yo.update(root, page1('fire!'))
+    },
+    function () {
+      root = yo.update(root, page1('but not now'))
+    },
+    function () {
       document.body.removeChild(root)
     }
   ], function () {
@@ -193,7 +202,9 @@ test('fire on same node but not from the same caller', function (t) {
       'page1 on',
       'page1 off',
       'page2 on',
-      'page2 off'
+      'page2 off',
+      'page1 on',
+      'page1 off'
     ]
     t.deepEqual(results, expected)
     t.end()
