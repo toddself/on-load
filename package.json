@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git://github.com/shama/on-load"
   },
+  "files": [
+    "index.js"
+  ],
   "keywords": [
     "html",
     "dom",
