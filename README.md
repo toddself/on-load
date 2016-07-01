@@ -13,9 +13,9 @@ On load/unload events for DOM elements using a MutationObserver
 var onload = require('on-load')
 
 var div = document.createElement('div')
-onload(div, function () {
+onload(div, function (el) {
   console.log('in the dom')
-}, function () {
+}, function (el) {
   console.log('out of the dom')
 })
 
