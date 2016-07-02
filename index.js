@@ -8,7 +8,7 @@ var INDEX = 0
 
 if (window && window.MutationObserver) {
   var observer = new MutationObserver(function (mutations) {
-    if (watch.length < 1) return
+    if (Object.keys(watch).length < 1) return
     for (var i = 0; i < mutations.length; i++) {
       if (mutations[i].attributeName === KEY_ATTR) {
         eachAttr(mutations[i], turnon, turnoff)
