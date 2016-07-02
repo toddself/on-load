@@ -36,16 +36,16 @@ module.exports = function onload (el, on, off) {
   return el
 }
 
-function turnon (index) {
+function turnon (index, el) {
   if (watch[index][0] && watch[index][2] === 0) {
-    watch[index][0]()
+    watch[index][0](el)
     watch[index][2] = 1
   }
 }
 
-function turnoff (index) {
+function turnoff (index, el) {
   if (watch[index][1] && watch[index][2] === 1) {
-    watch[index][1]()
+    watch[index][1](el)
     watch[index][2] = 0
   }
 }
@@ -61,10 +61,10 @@ function eachAttr (mutation, on, off) {
   }
   Object.keys(watch).forEach(function (k) {
     if (mutation.oldValue === k) {
-      off(k)
+      off(k, mutation.target)
     }
     if (newValue === k) {
-      on(k)
+      on(k, mutation.target)
     }
   })
 }
@@ -80,7 +80,7 @@ function eachMutation (nodes, fn) {
       var onloadid = nodes[i].getAttribute(KEY_ATTR)
       keys.forEach(function (k) {
         if (onloadid === k) {
-          fn(k)
+          fn(k, nodes[i])
         }
       })
     }

@@ -17,6 +17,37 @@ test('onload/onunload', function (t) {
   document.body.removeChild(el)
 })
 
+test('passed el reference', function (t) {
+  t.plan(4)
+  function page1 () {
+    var tree = yo`<div>page1</div>`
+    return onload(tree, function (el) {
+      t.equal(el, tree, 'onload passed element reference for page1')
+    }, function (el) {
+      t.equal(el, tree, 'onunload passed element reference for page1')
+    })
+  }
+  function page2 () {
+    var tree = yo`<div>page2</div>`
+    return onload(tree, function (el) {
+      t.equal(el.textContent, 'page2', 'onload passed element reference for page2')
+    }, function (el) {
+      t.equal(el.textContent, 'page2', 'onunload passed element reference for page2')
+    })
+  }
+
+  var root = page1()
+  document.body.appendChild(root)
+  runops([
+    function () {
+      root = yo.update(root, page2())
+    },
+    function () {
+      root.parentNode.removeChild(root)
+    }
+  ])
+})
+
 test('nested', function (t) {
   t.plan(2)
   var e1 = document.createElement('div')
