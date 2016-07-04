@@ -70,6 +70,7 @@ function eachAttr (mutation, on, off) {
 }
 
 function sameOrigin (oldValue, newValue) {
+  if (!oldValue || !newValue) return false
   return watch[oldValue][3] === watch[newValue][3]
 }
 
