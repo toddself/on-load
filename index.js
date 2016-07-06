@@ -56,14 +56,12 @@ function eachAttr (mutation, on, off) {
     watch[newValue] = watch[mutation.oldValue]
     return
   }
-  Object.keys(watch).forEach(function (k) {
-    if (mutation.oldValue === k) {
-      off(k, mutation.target)
-    }
-    if (newValue === k) {
-      on(k, mutation.target)
-    }
-  })
+  if (watch[mutation.oldValue]) {
+    off(mutation.oldValue, mutation.target)
+  }
+  if (watch[newValue]) {
+    on(newValue, mutation.target)
+  }
 }
 
 function sameOrigin (oldValue, newValue) {
