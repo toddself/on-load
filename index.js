@@ -51,9 +51,6 @@ function turnoff (index, el) {
 }
 
 function eachAttr (mutation, on, off) {
-  if (!watch[mutation.oldValue]) {
-    return
-  }
   var newValue = mutation.target.getAttribute(KEY_ATTR)
   if (sameOrigin(mutation.oldValue, newValue)) {
     watch[newValue] = watch[mutation.oldValue]
