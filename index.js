@@ -27,11 +27,11 @@ if (window && window.MutationObserver) {
   })
 }
 
-module.exports = function onload (el, on, off) {
+module.exports = function onload (el, on, off, caller) {
   on = on || function () {}
   off = off || function () {}
   el.setAttribute(KEY_ATTR, 'o' + INDEX)
-  watch['o' + INDEX] = [on, off, 0, onload.caller]
+  watch['o' + INDEX] = [on, off, 0, caller || onload.caller]
   INDEX += 1
   return el
 }
