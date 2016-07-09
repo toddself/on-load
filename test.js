@@ -242,6 +242,40 @@ test('fire on same node but not from the same caller', function (t) {
   })
 })
 
+test.skip('operates with memoized elements', function (t) {
+  t.plan(1)
+  var results = []
+  function sub () {
+    return onload(yo`<div>sub</div>`, function () {
+      results.push('sub on')
+    }, function () {
+      results.push('sub off')
+    })
+  }
+  var saved = null
+  function parent () {
+    saved = saved || onload(yo`<div>parent${sub()}</div>`, function () {
+      results.push('parent on')
+    }, function () {
+      results.push('parent off')
+    })
+    return saved
+  }
+  function app () {
+    return yo`<div>${parent()}</div>`
+  }
+  var root = app()
+  document.body.appendChild(root)
+  var interval = setInterval(function () {
+    yo.update(root, app())
+  }, 10)
+  setTimeout(function () {
+    clearInterval(interval)
+    t.deepEqual(results, ['parent on', 'sub on'])
+    t.end()
+  }, 100)
+})
+
 function runops (ops, done) {
   function loop () {
     var next = ops.shift()
