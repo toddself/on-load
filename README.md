@@ -41,7 +41,7 @@ Pass a dom `node` to `onload` to have a `onloadFn` function fire when the dom `n
 [npm-url]: https://npmjs.org/package/on-load
 [travis-image]: https://img.shields.io/travis/shama/on-load/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/shama/on-load
-[downloads-image]: http://img.shields.io/npm/dm/vel.svg?style=flat-square
+[downloads-image]: http://img.shields.io/npm/dm/on-load.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/on-load
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard-url]: https://github.com/feross/standard
