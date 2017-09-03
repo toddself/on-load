@@ -28,6 +28,12 @@ document.body.appendChild(div)
 document.body.removeChild(div)
 ```
 
+## API
+
+### `onload(node, onloadFn, onunloadFn, [caller])`
+
+Pass a dom `node` to `onload` to have a `onloadFn` function fire when the dom `node` is added to the document `dom` and a `onunloadFn` fire when the dom `node` is removed from the document `dom`.  Optionally a `caller` ID can be set to associate the onload/onunload hooks with a particular instance of of a dom `node`.  This is commonly used when 'componentizing' dom nodes.
+
 # license
 (c) 2016 Kyle Robinson Young. MIT License
 
